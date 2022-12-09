@@ -1,13 +1,7 @@
-<template>
-  <div class="hello">
-    <span>{{ age }}</span>
-  </div>
-</template>
-
-<script lang="ts">
 import { defineComponent } from 'vue'
 
 const PropsType = {
+  msg: String,
   age: {
     type: Number,
     required: true,
@@ -15,7 +9,8 @@ const PropsType = {
 } as const
 
 export default defineComponent({
-  name: 'HelloWorld',
   props: PropsType,
+  setup(props) {
+    return () => <span>{props.age}</span>
+  },
 })
-</script>
