@@ -1,11 +1,13 @@
 const Ajv = require('ajv')
+const localize = require('ajv-i18n')
 
 const schema = {
   type: 'object',
   properties: {
     name: {
       type: 'string',
-      format: 'test',
+      test: false,
+      errorMessage: '没有通过校验',
     },
     age: {
       type: 'number',
@@ -24,15 +26,23 @@ const schema = {
 }
 
 const ajv = new Ajv()
-ajv.addFormat('test', data => {
-  console.log(data, '---------')
-  return data === 'haha'
+ajv.addKeyword({
+  keyword: 'test',
+  macro() {
+    return {
+      minLength: 10,
+    }
+  },
 })
+
 const validate = ajv.compile(schema)
 const valid = validate({
-  name: 'haha',
+  name: 'yuning',
   age: 28,
   pets: ['huangdi', 'fuerdai'],
   isWorker: true,
 })
-if (!valid) console.log(validate.errors)
+if (!valid) {
+  localize.zh(validate.errors)
+  console.log(validate.errors)
+}
